@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.jlu.webcrawler.elio.dao.StudentInfoMySQLMapper">
+    <insert id="insertStudent" parameterType="cn.edu.jlu.webcrawler.elio.model.StudentInfo">
+        <![CDATA[
+        INSERT INTO t_student (username, userno, picurl, gender, department, major, teacher, telphone, email)
+        VALUES (#{username},#{userno},#{picurl},#{gender},#{department},#{major},#{teacher},#{telphone},#{email})
+        ON DUPLICATE KEY UPDATE username = #{username}, picurl = #{picurl}, gender = #{gender},
+        department = #{department}, major = #{major}, teacher = #{teacher}, telphone = #{telphone}, email = #{email}
+        ]]>
+    </insert>
+</mapper>

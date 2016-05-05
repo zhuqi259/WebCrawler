@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="actorSystem" class="cn.edu.jlu.webcrawler.elio.ext.ActorSystemFactoryBean">
+        <!-- actor system name -->
+        <property name="name" value="ZQActorSystem"/>
+        <!-- actor system configuration -->
+        <property name="config">
+            <bean class="com.typesafe.config.ConfigFactory" factory-method="load">
+                <constructor-arg value="application.conf"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="deadLetterActor" class="cn.edu.jlu.webcrawler.elio.ext.ActorFactoryBean">
+        <!-- actor system reference -->
+        <property name="actorSystem" ref="actorSystem"/>
+        <!-- class name of actor to create -->
+        <property name="actorClass" value="cn.edu.jlu.webcrawler.elio.actor.common.DeadLetterActor"/>
+    </bean>
+
+    <bean id="httpActor" class="cn.edu.jlu.webcrawler.elio.ext.ActorFactoryBean">
+        <!-- actor system reference -->
+        <property name="actorSystem" ref="actorSystem"/>
+        <!-- class name of actor to create -->
+        <property name="actorClass" value="cn.edu.jlu.webcrawler.elio.actor.common.ParallelHttpActor"/>
+    </bean>
+
+    <bean id="kuaiDaiLiActor" class="cn.edu.jlu.webcrawler.elio.ext.ActorFactoryBean">
+        <!-- actor system reference -->
+        <property name="actorSystem" ref="actorSystem"/>
+        <!-- class name of actor to create -->
+        <property name="actorClass" value="cn.edu.jlu.webcrawler.elio.actor.impl.KuaiDaiLiActor"/>
+    </bean>
+
+    <bean id="gimStudentActor" class="cn.edu.jlu.webcrawler.elio.ext.ActorFactoryBean">
+        <!-- actor system reference -->
+        <property name="actorSystem" ref="actorSystem"/>
+        <!-- class name of actor to create -->
+        <property name="actorClass" value="cn.edu.jlu.webcrawler.elio.actor.impl.GimStudentActor"/>
+    </bean>
+</beans>

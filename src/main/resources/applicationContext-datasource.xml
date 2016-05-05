@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd ">
+
+    <bean id="multipleDataSource" class="cn.edu.jlu.webcrawler.elio.mutiple.MultipleDataSource">
+        <property name="defaultTargetDataSource" ref="mysqlDB"/>
+        <property name="targetDataSources">
+            <map>
+                <entry key="mySqlDataSource" value-ref="mysqlDB"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="multipleDataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath*:cn/edu/jlu/webcrawler/elio/mapper/ProxyInfoMySQLMapper.xml</value>
+                <value>classpath*:cn/edu/jlu/webcrawler/elio/mapper/StudentInfoMySQLMapper.xml</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.edu.jlu.webcrawler.elio.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="multipleDataSource"/>
+    </bean>
+
+    <!-- DruidDataSource configuration -->
+    <bean id="mysqlDB" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+          destroy-method="close">
+        <property name="url" value="${mysql.url}"/>
+        <property name="username" value="${mysql.username}"/>
+        <property name="password" value="${mysql.password}"/>
+        <property name="driverClassName" value="${mysql.driverClassName}"/>
+        <property name="filters" value="stat,log4j"/>
+        <property name="validationQuery" value="select 1"/>
+    </bean>
+</beans>

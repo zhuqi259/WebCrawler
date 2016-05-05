@@ -1,0 +1,1 @@
+1. https://github.com/sabomichal/akka-java-springfactory

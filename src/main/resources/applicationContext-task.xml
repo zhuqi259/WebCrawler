@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="baskTask" class="cn.edu.jlu.webcrawler.elio.task.BaseTask" abstract="true"/>
+
+    <bean id="multiPageTask" class="cn.edu.jlu.webcrawler.elio.task.MultiPageTask" parent="baskTask" abstract="true"/>
+
+    <bean id="singleTask" class="cn.edu.jlu.webcrawler.elio.task.SingleTask" parent="baskTask" abstract="true"/>
+
+    <bean id="proxy" class="cn.edu.jlu.webcrawler.elio.task.impl.ProxyTask" parent="singleTask">
+        <property name="taskName" value="快代理"/>
+        <property name="requestMeta">
+            <bean class="cn.edu.jlu.webcrawler.elio.request.TaskRequestMeta">
+                <property name="encoding" value="UTF-8"/>
+                <property name="url"
+                          value="http://www.kuaidaili.com/free/intr/"/>
+                <property name="method" value="get"/>
+                <property name="isDynamicUA" value="true"/>
+                <property name="proxyABLE" value="true"/>
+                <property name="endMark" value="/html"/>
+                <property name="successTag" value="/html>"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="student" class="cn.edu.jlu.webcrawler.elio.task.impl.StudentTask" parent="singleTask">
+        <property name="taskName" value="吉大gim学生管理系统-抓取数据"/>
+        <property name="requestMeta">
+            <bean class="cn.edu.jlu.webcrawler.elio.request.TaskRequestMeta">
+                <property name="encoding" value="GBK"/>
+                <property name="url"
+                          value="http://gim.jlu.edu.cn"/>
+                <property name="method" value="get"/>
+                <property name="isDynamicUA" value="true"/>
+                <property name="proxyABLE" value="false"/>
+                <property name="endMark" value="/html"/>
+                <property name="successTag" value="body>"/>
+            </bean>
+        </property>
+    </bean>
+</beans>

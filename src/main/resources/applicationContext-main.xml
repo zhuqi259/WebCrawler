@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <context:component-scan base-package="cn.edu.jlu.webcrawler.elio"/>
+    <import resource="applicationContext-task.xml"/>
+    <import resource="applicationContext-datasource.xml"/>
+    <import resource="applicationContext-actor.xml"/>
+    <import resource="applicationContext-parser.xml"/>
+    <aop:aspectj-autoproxy/>
+    <!--开启这个配置，spring才能识别@Scheduled注解 -->
+    <task:annotation-driven scheduler="qbScheduler" mode="proxy"/>
+    <task:scheduler id="qbScheduler" pool-size="10"/>
+    <!--代理池来自数据库/文件，延迟加载，使用时候二选一 -->
+    <bean id="dbProxyPool" class="cn.edu.jlu.webcrawler.elio.proxy.DBProxyPool" init-method="initProxy"
+          lazy-init="true"/>
+    <bean id="fileProxyPool" class="cn.edu.jlu.webcrawler.elio.proxy.FileProxyPool" init-method="initProxy"
+          lazy-init="true"/>
+    <!--UA池 -->
+    <bean id="userAgentPool" class="cn.edu.jlu.webcrawler.elio.proxy.UserAgentPool" init-method="initUserAgentPool"/>
+    <context:property-placeholder location="classpath*:datasource.properties"/>
+</beans>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.jlu.webcrawler.elio.dao.ProxyInfoMySQLMapper">
+    <select id="getProxyList" resultType="string">
+        select CONCAT(vc_proxy_ip,':',num_proxy_port) from t_proxy order by dt_last_checktime desc
+    </select>
+
+    <insert id="insertProxy" parameterType="cn.edu.jlu.webcrawler.elio.model.ProxyInfo">
+        <![CDATA[
+      REPLACE   INTO t_proxy (vc_proxy_ip, num_proxy_port,vc_proxy_type, vc_proxy_position,vc_inter,dt_collect_time,dt_last_checktime)
+        VALUES (#{proxyIp},#{proxyPort},#{proxyType},#{proxyPosition},#{inter},now(),#{checkTime,jdbcType=TIMESTAMP})
+        ]]>
+    </insert>
+</mapper>
